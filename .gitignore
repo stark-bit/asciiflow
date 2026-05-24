@@ -1,6 +1,5 @@
 node_modules
-bazel-*
+dist/
 yarn-error.log
-user.bazelrc
 test-results/
 worktrees/

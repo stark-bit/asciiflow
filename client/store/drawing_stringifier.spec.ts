@@ -1,8 +1,5 @@
 import { Layer } from "#asciiflow/client/layer";
-import {
-  DrawingStringifier,
-  IDrawing,
-} from "#asciiflow/client/store/drawing_stringifier";
+import { DrawingStringifier, type IDrawing } from "#asciiflow/client/store/drawing_stringifier";
 import { layerToText } from "#asciiflow/client/text_utils";
 import { Vector } from "#asciiflow/client/vector";
 import { expect } from "chai";

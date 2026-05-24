@@ -1,7 +1,5 @@
 import { defineConfig, devices } from "@playwright/test";
 
-const port = process.env.TEST_SERVER_PORT || "8080";
-
 export default defineConfig({
   testDir: ".",
   testMatch: "**/*.spec.js",
@@ -10,8 +8,13 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
   reporter: "list",
+  webServer: {
+    command: "pnpm preview --port 8080",
+    port: 8080,
+    reuseExistingServer: !process.env.CI,
+  },
   use: {
-    baseURL: `http://127.0.0.1:${port}`,
+    baseURL: "http://127.0.0.1:8080",
     trace: "on-first-retry",
   },
   projects: [

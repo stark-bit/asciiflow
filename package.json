@@ -1,12 +1,14 @@
 {
   "name": "asciiflow2",
-  "main": "index.js",
-  "icon": "images/favicon.png",
   "imports": {
     "#asciiflow/*": "./*"
   },
   "scripts": {
-    "start": "electron ."
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "NODE_OPTIONS='--import tsx/esm' mocha --file testing/test_setup.ts 'client/**/*.spec.ts'",
+    "test:e2e": "pnpm build && playwright test --config e2e/playwright.config.mjs"
   },
   "type": "module",
   "dependencies": {
@@ -42,13 +44,16 @@
     "zustand": "^4.5.5"
   },
   "pnpm": {
-    "onlyBuiltDependencies": ["@playwright/test", "playwright", "playwright-core", "fsevents"],
-    "overrides": {
-      "postcss@<7.0.36": ">=7.0.36",
-      "postcss@<8.4.31": ">=8.4.31",
-      "minimist@<0.2.1": ">=0.2.1",
-      "minimatch@<3.0.5": ">=3.0.5",
-      "minimist@<0.2.4": ">=0.2.4"
-    }
+    "onlyBuiltDependencies": [
+      "@playwright/test",
+      "playwright",
+      "playwright-core",
+      "fsevents"
+    ]
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^6.0.2",
+    "tsx": "^4.22.3",
+    "vite": "^8.0.14"
   }
 }
