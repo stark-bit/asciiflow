@@ -2,7 +2,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "#asciiflow/*": ["*", "bazel-bin/*", "bazel-genfiles/*"],
+      "#asciiflow/*": ["*"],
     },
     "module": "ESNext",
     "moduleResolution": "node",
@@ -19,5 +19,5 @@
     "declaration": true,
     "strictPropertyInitialization": false
   },
-  "exclude": ["bazel-*", "node_modules"]
+  "exclude": ["dist", "node_modules"]
 }

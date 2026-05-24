@@ -1,2 +1,6 @@
 allowBuilds:
-  electron: false
+  esbuild: true
+  "@playwright/test": true
+  playwright: true
+  playwright-core: true
+  fsevents: true
