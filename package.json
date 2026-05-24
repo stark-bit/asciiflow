@@ -11,8 +11,6 @@
   "type": "module",
   "dependencies": {
     "@playwright/test": "^1.49.0",
-    "playwright": "^1.49.0",
-    "playwright-core": "^1.49.0",
     "@types/chai": "^4.3.12",
     "@types/diff": "^5.0.9",
     "@types/json-stable-stringify": "^1.0.36",
@@ -26,12 +24,13 @@
     "@types/sinon": "^17.0.3",
     "@types/uuid": "^8.3.4",
     "chai": "^4.4.1",
-    "electron": "^29.0.1",
     "http-server": "^14.1.1",
     "js-base64": "^3.7.7",
     "json-stable-stringify": "^1.1.1",
     "mocha": "^11.0.0",
     "pako": "^1.0.11",
+    "playwright": "^1.49.0",
+    "playwright-core": "^1.49.0",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "react-router": "^5.3.4",
@@ -43,6 +42,7 @@
     "zustand": "^4.5.5"
   },
   "pnpm": {
+    "onlyBuiltDependencies": ["@playwright/test", "playwright", "playwright-core", "fsevents"],
     "overrides": {
       "postcss@<7.0.36": ">=7.0.36",
       "postcss@<8.4.31": ">=8.4.31",

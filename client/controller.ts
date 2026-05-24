@@ -106,6 +106,24 @@ export class Controller {
         event.preventDefault();
       }
     }
+    // Bare digit 1-6 switches tools when not in text mode.
+    // In text mode, digits fall through to handleKeyPress so they type normally;
+    // use Alt+1-6 instead (handled above).
+    if (!event.altKey && !event.ctrlKey && !event.metaKey &&
+        store.selectedToolMode !== ToolMode.TEXT) {
+      const digitToolMap: Partial<Record<number, ToolMode>> = {
+        ["1".charCodeAt(0)]: ToolMode.BOX,
+        ["2".charCodeAt(0)]: ToolMode.SELECT,
+        ["3".charCodeAt(0)]: ToolMode.FREEFORM,
+        ["4".charCodeAt(0)]: ToolMode.ARROWS,
+        ["5".charCodeAt(0)]: ToolMode.LINES,
+        ["6".charCodeAt(0)]: ToolMode.TEXT,
+      };
+      if (digitToolMap[event.keyCode] !== undefined) {
+        store.setToolMode(digitToolMap[event.keyCode]);
+        event.preventDefault();
+      }
+    }
     if (event.ctrlKey || event.metaKey) {
       // Copy (Ctrl+C), Cut (Ctrl+X), and Paste (Ctrl+V) are handled by
       // native copy/cut/paste events in app.tsx — don't intercept them here
@@ -268,18 +286,21 @@ export class InputController {
 
     if (this.pointers.size >= 2) {
       const [a, b] = [...this.pointers.values()];
-      // Pinch-to-zoom.
       const currentLength = a.subtract(b).length();
-      if (this.pinchStartLength > 0) {
+      const midpoint = new Vector((a.x + b.x) / 2, (a.y + b.y) / 2);
+      if (this.pinchStartLength > 0 && this.panOrigin) {
         let newZoom = (this.pinchStartZoom * currentLength) / this.pinchStartLength;
         newZoom = snapZoom(Math.max(Math.min(newZoom, 5), 0.2));
+        const w = document.documentElement.clientWidth;
+        const h = document.documentElement.clientHeight;
+        // Unified zoom + pan: keeps the frame point originally under panOrigin
+        // pinned under the current midpoint as both scale and translation change.
+        const newOffset = new Vector(
+          (this.panOrigin.x - w / 2) / this.pinchStartZoom + this.panOriginOffset.x - (midpoint.x - w / 2) / newZoom,
+          (this.panOrigin.y - h / 2) / this.pinchStartZoom + this.panOriginOffset.y - (midpoint.y - h / 2) / newZoom
+        );
         store.currentCanvas.setZoom(newZoom);
-      }
-      // Two-finger pan.
-      if (this.panOrigin) {
-        const midpoint = new Vector((a.x + b.x) / 2, (a.y + b.y) / 2);
-        const delta = this.panOrigin.subtract(midpoint).scale(1 / store.currentCanvas.zoom);
-        store.currentCanvas.setOffset(this.panOriginOffset.add(delta));
+        store.currentCanvas.setOffset(newOffset);
       }
     } else {
       // Single pointer: pass to controller for draw or drag.
@@ -332,9 +353,18 @@ export class InputController {
       const rawDelta = e.deltaY !== 0 ? e.deltaY : e.deltaX;
       if (rawDelta === 0) return;
       const delta = -rawDelta;
-      const rawZoom = store.currentCanvas.zoom * (delta > 0 ? 1.1 : 0.9);
+      const oldZoom = store.currentCanvas.zoom;
+      const rawZoom = oldZoom * (delta > 0 ? 1.1 : 0.9);
       const newZoom = snapZoom(Math.max(Math.min(rawZoom, 5), 0.2));
+      const w = document.documentElement.clientWidth;
+      const h = document.documentElement.clientHeight;
+      const offset = store.currentCanvas.offset;
+      const newOffset = new Vector(
+        offset.x + (e.clientX - w / 2) * (1 / oldZoom - 1 / newZoom),
+        offset.y + (e.clientY - h / 2) * (1 / oldZoom - 1 / newZoom)
+      );
       store.currentCanvas.setZoom(newZoom);
+      store.currentCanvas.setOffset(newOffset);
     } else {
       // Pan: plain scroll moves the canvas.
       // Shift+scroll converts vertical scroll to horizontal pan, for mice

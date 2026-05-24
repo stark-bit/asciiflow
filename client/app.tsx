@@ -74,9 +74,9 @@ async function render() {
 // tslint:disable-next-line: no-console
 initFont().then(() => render()).catch((e) => console.log(e));
 
-document.getElementById("root").addEventListener("keypress", (e) => controller.handleKeyPress(e));
-document.getElementById("root").addEventListener("keydown", (e) => controller.handleKeyDown(e));
-document.getElementById("root").addEventListener("keyup", (e) => controller.handleKeyUp(e));
+document.addEventListener("keypress", (e) => controller.handleKeyPress(e));
+document.addEventListener("keydown", (e) => controller.handleKeyDown(e));
+document.addEventListener("keyup", (e) => controller.handleKeyUp(e));
 
 // Register wheel handler with { passive: false } so preventDefault() can
 // suppress browser page zoom on Ctrl+scroll / pinch-to-zoom.
