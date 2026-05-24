@@ -1,27 +1,26 @@
 # ASCIIFlow
 
-ASCII diagram drawing web app (asciiflow.com). Client-side only, also runs as Electron desktop app.
+ASCII diagram drawing web app (asciiflow.com). Client-side only.
 
 ## Stack
 
 - **Language:** TypeScript 5.8
 - **UI:** React 16.14.0 + Material-UI 4.12.4
 - **Routing:** React Router DOM 5.3.4
-- **Build:** Bazel 8 (via Bazelisk) + esbuild (via aspect_rules_esbuild)
+- **Build:** Vite 8 (dev server + prod bundle via esbuild)
 - **Tests:** Mocha + Chai + Sinon (unit), Playwright (e2e)
-- **Desktop:** Electron 29.0.1
 
 ## Build & Dev
 
 ```bash
-bazel build client:bundle      # Production build (esbuild)
-bazel build client:site         # Full site with static assets
-bazel test //common:all         # Common tests only
-bazel test //client:all         # Client tests only
-bazel test //e2e:all            # Playwright e2e tests
+pnpm dev            # Dev server with HMR (http://localhost:5173)
+pnpm build          # Production build → dist/
+pnpm preview        # Serve dist/ locally
+pnpm test           # Mocha unit tests
+pnpm test:e2e       # Playwright e2e tests
 ```
 
-Requires Node 22.x (managed by Bazel toolchain) and Bazel 8.x (via Bazelisk).
+Requires Node 22.x (`nvm use` picks up `.nvmrc`). Uses pnpm.
 
 ## Project Structure
 
@@ -46,15 +45,11 @@ common/                # Shared utilities
   stringifiers.ts      # Serialization interfaces
 testing/               # Test infrastructure
   test_setup.ts        # localStorage/window shim for Node.js tests
-bazel/                 # Bazel build infrastructure
-  playwright.bzl       # playwright_test() rule for e2e tests
-  playwright-runner.mjs # Playwright test runner with static server
-  resolve-extensions-loader.mjs # ESM loader for .ts extension resolution
+  resolve-extensions-loader.mjs # ESM loader for extensionless imports (Mocha)
 e2e/                   # Playwright e2e tests
   app.spec.js          # Application e2e tests
-  playwright.config.mjs # Playwright configuration
-electron/              # Electron desktop wrapper
-site/                  # Static site assets
+  playwright.config.mjs # Playwright configuration (webServer: vite preview)
+dist/                  # Production build output (gitignored)
 ```
 
 ## Architecture
@@ -70,7 +65,7 @@ site/                  # Static site assets
 
 - TypeScript with strict type checking
 - React functional components with hooks
-- Bazel BUILD files per directory
+- Vite handles TS compilation, bundling, and dev server (`vite.config.ts` at repo root)
 - Unit tests use `.spec.ts` suffix alongside source files
 - E2e tests use `.spec.js` in `e2e/` directory
 - Path alias: `#asciiflow/*` maps to repo root
@@ -116,7 +111,7 @@ Re-triaged February 2026. See GitHub issues for full details.
 | #43 | Diagonal lines |
 | #54 | Export selected area only |
 | #190 | Mobile device support (toolbar is responsive, needs touch gesture work) |
-| #346 | PWA support for offline/installable use (replaces Electron) |
+| #346 | PWA support for offline/installable use (Electron removed) |
 | #339 | Emoji support (wide character rendering) |
 
 ### Feature Requests — Moderate Priority
