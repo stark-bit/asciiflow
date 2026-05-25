@@ -48,12 +48,12 @@ const TOOLS: Array<{
   shortcut: string;
   color: string;
 }> = [
-  { mode: ToolMode.BOX, label: "box", testId: "tool-boxes", shortcut: "1", color: "var(--color-cyan)" },
-  { mode: ToolMode.SELECT, label: "select", testId: "tool-select---move", shortcut: "2", color: "var(--color-success)" },
-  { mode: ToolMode.FREEFORM, label: "draw", testId: "tool-freeform", shortcut: "3", color: "var(--color-orange)" },
-  { mode: ToolMode.ARROWS, label: "arrow", testId: "tool-arrow", shortcut: "4", color: "var(--color-purple)" },
-  { mode: ToolMode.LINES, label: "line", testId: "tool-line", shortcut: "5", color: "var(--color-accent)" },
-  { mode: ToolMode.TEXT, label: "text", testId: "tool-text", shortcut: "6", color: "var(--color-warning)" },
+  { mode: ToolMode.SELECT, label: "select", testId: "tool-select---move", shortcut: "1", color: "var(--color-success)" },
+  { mode: ToolMode.BOX, label: "box", testId: "tool-boxes", shortcut: "2", color: "var(--color-cyan)" },
+  { mode: ToolMode.ARROWS, label: "arrow", testId: "tool-arrow", shortcut: "3", color: "var(--color-purple)" },
+  { mode: ToolMode.LINES, label: "line", testId: "tool-line", shortcut: "4", color: "var(--color-accent)" },
+  { mode: ToolMode.TEXT, label: "text", testId: "tool-text", shortcut: "5", color: "var(--color-warning)" },
+  { mode: ToolMode.FREEFORM, label: "draw", testId: "tool-freeform", shortcut: "6", color: "var(--color-orange)" },
 ];
 
 // Helper: stop all keyboard event propagation so controller doesn't intercept
@@ -146,8 +146,7 @@ export function Toolbar() {
                   }}
                   data-testid={tool.testId}
                 >
-                  {tool.label}
-                  {altPressed && <> <Kbd>{tool.shortcut}</Kbd></>}
+                  {altPressed && <><Kbd>{tool.shortcut}</Kbd>{" "}</>}{tool.label}
                 </button>
               );
             })}

@@ -87,22 +87,22 @@ export class Controller {
     if (event.altKey) {
       store.setAltPressed(true);
       if (event.keyCode === "1".charCodeAt(0)) {
-        store.setToolMode(ToolMode.BOX);
-        event.preventDefault();
-      } else if (event.keyCode === "2".charCodeAt(0)) {
         store.setToolMode(ToolMode.SELECT);
         event.preventDefault();
-      } else if (event.keyCode === "3".charCodeAt(0)) {
-        store.setToolMode(ToolMode.FREEFORM);
+      } else if (event.keyCode === "2".charCodeAt(0)) {
+        store.setToolMode(ToolMode.BOX);
         event.preventDefault();
-      } else if (event.keyCode === "4".charCodeAt(0)) {
+      } else if (event.keyCode === "3".charCodeAt(0)) {
         store.setToolMode(ToolMode.ARROWS);
         event.preventDefault();
-      } else if (event.keyCode === "5".charCodeAt(0)) {
+      } else if (event.keyCode === "4".charCodeAt(0)) {
         store.setToolMode(ToolMode.LINES);
         event.preventDefault();
-      } else if (event.keyCode === "6".charCodeAt(0)) {
+      } else if (event.keyCode === "5".charCodeAt(0)) {
         store.setToolMode(ToolMode.TEXT);
+        event.preventDefault();
+      } else if (event.keyCode === "6".charCodeAt(0)) {
+        store.setToolMode(ToolMode.FREEFORM);
         event.preventDefault();
       }
     }
@@ -112,12 +112,12 @@ export class Controller {
     if (!event.altKey && !event.ctrlKey && !event.metaKey &&
         store.selectedToolMode !== ToolMode.TEXT) {
       const digitToolMap: Partial<Record<number, ToolMode>> = {
-        ["1".charCodeAt(0)]: ToolMode.BOX,
-        ["2".charCodeAt(0)]: ToolMode.SELECT,
-        ["3".charCodeAt(0)]: ToolMode.FREEFORM,
-        ["4".charCodeAt(0)]: ToolMode.ARROWS,
-        ["5".charCodeAt(0)]: ToolMode.LINES,
-        ["6".charCodeAt(0)]: ToolMode.TEXT,
+        ["1".charCodeAt(0)]: ToolMode.SELECT,
+        ["2".charCodeAt(0)]: ToolMode.BOX,
+        ["3".charCodeAt(0)]: ToolMode.ARROWS,
+        ["4".charCodeAt(0)]: ToolMode.LINES,
+        ["5".charCodeAt(0)]: ToolMode.TEXT,
+        ["6".charCodeAt(0)]: ToolMode.FREEFORM,
       };
       if (digitToolMap[event.keyCode] !== undefined) {
         store.setToolMode(digitToolMap[event.keyCode]);
@@ -174,6 +174,12 @@ export class Controller {
     }
     if (event.keyCode === 39) {
       specialKeyCode = constants.KEY_RIGHT;
+    }
+    if (event.keyCode === 27) { // Escape
+      if (store.selectedToolMode === ToolMode.TEXT) {
+        store.setToolMode(ToolMode.SELECT);
+        event.preventDefault();
+      }
     }
     if (specialKeyCode != null) {
       store.currentTool.handleKey(specialKeyCode, getModifierKeys(event));
