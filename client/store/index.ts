@@ -27,6 +27,7 @@ export interface IModifierKeys {
   shift?: boolean;
   ctrl?: boolean;
   meta?: boolean;
+  alt?: boolean;
 }
 
 export interface IDrawing {

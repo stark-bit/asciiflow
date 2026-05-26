@@ -33,6 +33,9 @@ export class DrawText extends AbstractDrawFunction {
     }
     this.textLayer = newLayer;
 
+    // Step size: Option=10, Ctrl+Option=30, bare=1.
+    const steps = modifierKeys.alt ? (modifierKeys.meta ? 30 : 10) : 1;
+
     // Handle special characters.
     if (value.startsWith("<") && value.endsWith(">")) {
       if (value === "<enter>") {
@@ -47,22 +50,24 @@ export class DrawText extends AbstractDrawFunction {
         }
       }
       if (value === "<backspace>") {
-        this.currentPosition = this.currentPosition.left();
-        // Write a space instead of deleting, so it overwrites committed text underneath.
-        this.textLayer.set(this.currentPosition, " ");
+        for (let i = 0; i < steps; i++) {
+          this.currentPosition = this.currentPosition.left();
+          // Write a space instead of deleting, so it overwrites committed text underneath.
+          this.textLayer.set(this.currentPosition, " ");
+        }
         store.currentCanvas.setScratchLayer(this.textLayer);
       }
       if (value === "<left>") {
-        this.currentPosition = this.currentPosition.left();
+        this.currentPosition = this.currentPosition.left(steps);
       }
       if (value === "<right>") {
-        this.currentPosition = this.currentPosition.right();
+        this.currentPosition = this.currentPosition.right(steps);
       }
       if (value === "<up>") {
-        this.currentPosition = this.currentPosition.up();
+        this.currentPosition = this.currentPosition.up(steps);
       }
       if (value === "<down>") {
-        this.currentPosition = this.currentPosition.down();
+        this.currentPosition = this.currentPosition.down(steps);
       }
       store.currentCanvas.setSelection(
         new Box(this.currentPosition, this.currentPosition)

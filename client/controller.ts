@@ -163,6 +163,13 @@ export class Controller {
     if (event.keyCode === 13) {
       specialKeyCode = constants.KEY_RETURN;
     }
+    // Prevent browser back/forward (macOS Option+Left/Right) when text tool
+    // uses Option+Arrow for accelerated cursor movement.
+    if (event.altKey && store.selectedToolMode === ToolMode.TEXT) {
+      if ([37, 38, 39, 40].includes(event.keyCode)) {
+        event.preventDefault();
+      }
+    }
     if (event.keyCode === 38) {
       specialKeyCode = constants.KEY_UP;
     }
@@ -229,6 +236,7 @@ function getModifierKeys(event: EventWithModifierKeys): IModifierKeys {
     ctrl: event.ctrlKey,
     shift: event.shiftKey,
     meta: event.metaKey,
+    alt: event.altKey,
   };
 }
 /**
