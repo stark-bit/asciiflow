@@ -1,45 +1,23 @@
-# [asciiflow.com](https://asciiflow.com)
+# [![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
 
-ASCIIFlow is a client-side only web based application for drawing ASCII diagrams. You can use it at [asciiflow.com](https://asciiflow.com).
+ASCIIFlow is a client-side only web based application for drawing ASCII diagrams. You can use the original forked version at [asciiflow.com](https://asciiflow.com) or build this adjusted* version yourself
 
-<p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="./assets/asciiflow-scr-dark.png">
-    <source media="(prefers-color-scheme: light)" srcset="./assets/asciiflow-scr-light.png">
-    <img alt="ASCIIFlow screenshot" src="./assets/asciiflow-scr-light.png">
-  </picture>
-</p>
+Adjustments
+- PWA support
+- improve keyboard navigation
+  - `cmd`/`option` big step navigation
+    - `cmd` (10 steps up,down,left,right, backspace 10x)
+    - `cmd+option` = 30 steps
+- re-org hotkeys
+  - hotkeys trigger on numbers unless text
+  - change order
+- edit zoom in logic
+  -  zoom on cursor location (not some random location)
+- Lite version
+  - remove `bazel`
+  - remove `electron`
 
-## Contributing
 
-### Installation
 
-ASCIIFlow is built with [Bazel](https://docs.bazel.build/versions/4.0.0/getting-started.html).
-Bazel is most easily installed to the correct version through [Bazelisk](https://github.com/bazelbuild/bazelisk). See `.bazelversion` for the correct version if you aren't using Bazelisk.
 
-```
-npm install -g @bazel/bazelisk
-yarn global add @bazel/bazelisk
-```
-
-For development, ibazel is also a very useful tool to help with automatic rebuilding and reloading.
-
-```
-npm install -g @bazel/ibazel
-yarn global add @bazel/ibazel
-```
-
-### Running ASCIIFlow locally
-
-After installation of Bazel/Bazelisk, you can run ASCIIFlow locally with:
-
-```
-ibazel run client:devserver
-```
-
-Or without ibazel (won't do live reloading):
-
-```
-bazel run client:devserver
-```
 
